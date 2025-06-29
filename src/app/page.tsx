@@ -1,8 +1,38 @@
+'use client';
 import Image from "next/image";
+import { useTranslation, Trans } from "react-i18next";
+
+const lngs: Record<string, { nativeName: string }> = {
+  en: { nativeName: "English" },
+  es: { nativeName: "Español" },
+}
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <header className="row-start-1 flex items-center justify-between w-full max-w-3xl">
+        <div className="gap-2 flex items-center">
+          {Object.keys(lngs).map((lng) => (
+            <button
+              type="submit"
+              key={lng}
+              className={`px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700
+                ${i18n.resolvedLanguage === lng ? 'bg-gray-300 dark:bg-gray-600' : ''}`}
+              onClick={() => i18n.changeLanguage(lng)}
+              disabled={i18n.resolvedLanguage === lng}
+            >
+              {lngs[lng].nativeName}
+            </button>
+          ))}
+        </div>
+        <p>
+          <Trans i18nKey="description">
+            This is a brief description of my work and skills.
+          </Trans>
+        </p>
+      </header>
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
@@ -26,7 +56,9 @@ export default function Home() {
         </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <p>LOl</p>
+          <p>
+            {t('welcome')}
+          </p>
           
         </div>
       </main>
@@ -37,16 +69,12 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
+          {t('contact')}
         </a>
       </footer>
     </div>
   );
 }
+
+
+
